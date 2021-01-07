@@ -565,3 +565,145 @@ SELECT DISTINCT player, teamid, gtime FROM game JOIN goal ON matchid = id
 SELECT teamname, COUNT(*) FROM eteam
   JOIN goal ON teamid = id GROUP BY teamname HAVING COUNT(*) < 3;
 
+
+
+=========== More JOIN operations ===========
+This tutorial introduces the notion of a join. The database consists of three tables movie , actor and casting.
+
+1.
+SELECT id, title
+ FROM movie
+WHERE yr = 1962
+
+2.
+SELECT yr 
+FROM movie
+WHERE title = 'Citizen Kane'
+
+3.
+SELECT id, title, yr
+FROM movie
+WHERE title LIKE 'Star Trek%'
+ORDER BY yr
+
+4.
+SELECT id
+FROM actor
+WHERE name = 'Glenn Close'
+
+5.
+SELECT id
+FROM movie
+WHERE title = 'Casablanca'
+
+6.
+SELECT actor.name
+FROM actor JOIN casting
+ON casting.actorid = actor.id
+WHERE casting.movieid = 11768;
+
+7.
+SELECT actor.name
+FROM actor JOIN casting ON casting.actorid = actor.id
+JOIN movie ON movie.id = casting.movieid
+WHERE movie.title = 'Alien';
+
+8.
+SELECT movie.title
+FROM movie JOIN casting ON casting.movieid = movie.id
+JOIN actor ON actor.id = casting.actorid
+WHERE actor.name = 'Harrison Ford';
+
+9.
+SELECT movie.title
+FROM movie JOIN casting ON casting.movieid = movie.id
+JOIN actor ON actor.id = casting.actorid
+WHERE actor.name = 'Harrison Ford'
+AND casting.ord != 1;
+
+10.
+SELECT movie.title, actor.name
+FROM movie JOIN casting ON casting.movieid = movie.id
+JOIN actor ON actor.id = casting.actorid
+WHERE movie.yr = 1962 AND casting.ord = 1;
+
+11.
+SELECT movie.yr, COUNT(*)
+FROM movie JOIN casting ON casting.movieid = movie.id
+JOIN actor ON actor.id = casting.actorid
+WHERE actor.name = 'Rock Hudson'
+GROUP BY movie.yr
+HAVING COUNT(movie.title) >= 2;
+
+12.
+SELECT DISTINCT m.title, a.name
+FROM (SELECT movie.*
+      FROM movie
+      JOIN casting
+      ON casting.movieid = movie.id
+      JOIN actor
+      ON actor.id = casting.actorid
+      WHERE actor.name = 'Julie Andrews') AS m
+JOIN (SELECT actor.*, casting.movieid AS movieid
+      FROM actor
+      JOIN casting
+      ON casting.actorid = actor.id
+      WHERE casting.ord = 1) as a
+ON m.id = a.movieid
+ORDER BY m.title;
+
+13.
+SELECT actor.name
+FROM actor JOIN casting ON casting.actorid = actor.id
+WHERE casting.ord = 1
+GROUP BY actor.name
+HAVING COUNT(*) >= 15;
+
+14.
+SELECT title, COUNT(actorid)
+FROM movie JOIN casting ON movie.id = movieid WHERE yr = 1978
+GROUP BY title ORDER BY COUNT(actorid) DESC, title
+
+15.
+SELECT name FROM actor JOIN casting ON actor.id = actorid
+WHERE movieid IN
+  (SELECT id FROM movie WHERE title IN
+    (SELECT title FROM movie JOIN casting ON movie.id = movieid WHERE actorid IN
+      (SELECT id FROM actor WHERE name = 'Art Garfunkel')))
+  AND name != 'Art Garfunkel'
+
+  QUIZZ 7
+
+1.
+SELECT name FROM actor INNER JOIN movie ON actor.id = director
+  WHERE gross < budget;
+
+2.
+SELECT * FROM actor JOIN casting ON actor.id = actorid
+  JOIN movie ON movie.id = movieid;
+
+3.
+SELECT name, COUNT(movieid) FROM casting JOIN actor ON actorid=actor.id
+  WHERE name LIKE 'John %' GROUP BY name ORDER BY 2 DESC;
+
+4.
+SELECT title FROM movie JOIN casting ON (movieid=movie.id)
+  JOIN actor   ON (actorid=actor.id) WHERE name='Paul Hogan' AND ord = 1;
+
+5.
+SELECT name FROM movie JOIN casting ON movie.id = movieid
+  JOIN actor ON actor.id = actorid WHERE ord = 1 AND director = 351;
+
+6.
+link the director column in movies with the primary key in actor
+connect the primary keys of movie and actor via the casting table
+
+
+7.
+SELECT title, yr FROM movie, casting, actor
+  WHERE name='Robert De Niro' AND movieid=movie.id AND actorid=actor.id AND ord = 3;
+
+
+
+  =========== Using Null ===========
+This tutorial introduces the notion of a join. The database consists of three tables movie , actor and casting.
