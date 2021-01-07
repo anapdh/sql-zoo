@@ -392,11 +392,11 @@ For example the function SUM would aggregate the values 2, 4 and 5 to deliver th
 
 1.
 SELECT SUM(population)
-FROM world;
+FROM world
 
 2.
 SELECT DISTINCT(continent)
-FROM world;
+FROM world
 
 3.
 SELECT SUM(gdp)
@@ -468,7 +468,7 @@ This tutorial introduces JOIN which allows you to use data from two or more tabl
 1.
 SELECT matchid, player
 FROM goal
-WHERE teamid = 'GER';
+WHERE teamid = 'GER'
 
 2.
 SELECT id, stadium, team1, team2
@@ -483,7 +483,7 @@ WHERE teamid = 'GER'
 4.
 SELECT team1, team2, player
   FROM game JOIN goal ON (id = matchid)
-WHERE player LIKE 'Mario%';
+WHERE player LIKE 'Mario%'
 
 5.
 SELECT player, teamid, coach, gtime
@@ -547,23 +547,23 @@ matchid, teamid, player, gtime, id, teamname, coach;
 
 3.
 SELECT player, teamid, COUNT(*) FROM game JOIN goal ON matchid = id
-  WHERE (team1 = "GRE" OR team2 = "GRE") AND teamid != 'GRE' GROUP BY player, teamid;
+  WHERE (team1 = "GRE" OR team2 = "GRE") AND teamid != 'GRE' GROUP BY player, teamid
 
 4.
 SELECT DISTINCT teamid, mdate FROM goal JOIN game on (matchid=id)
-  WHERE mdate = '9 June 2012';
+  WHERE mdate = '9 June 2012'
 
 5.
 SELECT DISTINCT player, teamid FROM game JOIN goal ON matchid = id
-  WHERE stadium = 'National Stadium, Warsaw' AND (team1 = 'POL' OR team2 = 'POL') AND teamid != 'POL';
+  WHERE stadium = 'National Stadium, Warsaw' AND (team1 = 'POL' OR team2 = 'POL') AND teamid != 'POL'
 
 6.
 SELECT DISTINCT player, teamid, gtime FROM game JOIN goal ON matchid = id
-  WHERE stadium = 'Stadion Miejski (Wroclaw)' AND (( teamid = team2 AND team1 != 'ITA') OR ( teamid = team1 AND team2 != 'ITA'));
+  WHERE stadium = 'Stadion Miejski (Wroclaw)' AND (( teamid = team2 AND team1 != 'ITA') OR ( teamid = team1 AND team2 != 'ITA'))
 
 7.
 SELECT teamname, COUNT(*) FROM eteam
-  JOIN goal ON teamid = id GROUP BY teamname HAVING COUNT(*) < 3;
+  JOIN goal ON teamid = id GROUP BY teamname HAVING COUNT(*) < 3
 
 
 
@@ -600,32 +600,32 @@ WHERE title = 'Casablanca'
 SELECT actor.name
 FROM actor JOIN casting
 ON casting.actorid = actor.id
-WHERE casting.movieid = 11768;
+WHERE casting.movieid = 11768
 
 7.
 SELECT actor.name
 FROM actor JOIN casting ON casting.actorid = actor.id
 JOIN movie ON movie.id = casting.movieid
-WHERE movie.title = 'Alien';
+WHERE movie.title = 'Alien'
 
 8.
 SELECT movie.title
 FROM movie JOIN casting ON casting.movieid = movie.id
 JOIN actor ON actor.id = casting.actorid
-WHERE actor.name = 'Harrison Ford';
+WHERE actor.name = 'Harrison Ford'
 
 9.
 SELECT movie.title
 FROM movie JOIN casting ON casting.movieid = movie.id
 JOIN actor ON actor.id = casting.actorid
 WHERE actor.name = 'Harrison Ford'
-AND casting.ord != 1;
+AND casting.ord != 1
 
 10.
 SELECT movie.title, actor.name
 FROM movie JOIN casting ON casting.movieid = movie.id
 JOIN actor ON actor.id = casting.actorid
-WHERE movie.yr = 1962 AND casting.ord = 1;
+WHERE movie.yr = 1962 AND casting.ord = 1
 
 11.
 SELECT movie.yr, COUNT(*)
@@ -633,7 +633,7 @@ FROM movie JOIN casting ON casting.movieid = movie.id
 JOIN actor ON actor.id = casting.actorid
 WHERE actor.name = 'Rock Hudson'
 GROUP BY movie.yr
-HAVING COUNT(movie.title) >= 2;
+HAVING COUNT(movie.title) >= 2
 
 12.
 SELECT DISTINCT m.title, a.name
@@ -650,14 +650,14 @@ JOIN (SELECT actor.*, casting.movieid AS movieid
       ON casting.actorid = actor.id
       WHERE casting.ord = 1) as a
 ON m.id = a.movieid
-ORDER BY m.title;
+ORDER BY m.title
 
 13.
 SELECT actor.name
 FROM actor JOIN casting ON casting.actorid = actor.id
 WHERE casting.ord = 1
 GROUP BY actor.name
-HAVING COUNT(*) >= 15;
+HAVING COUNT(*) >= 15
 
 14.
 SELECT title, COUNT(actorid)
@@ -705,7 +705,7 @@ SELECT title, yr FROM movie, casting, actor
 
 
 
-  =========== Using Null ===========
+=========== Using Null ===========
 This tutorial introduces the notion of a join. The database consists of three tables movie , actor and casting.
 
 1.
@@ -735,19 +735,19 @@ FROM teacher;
 
 7.
 SELECT COUNT(name), COUNT(mobile)
-FROM teacher;
+FROM teacher
 
 8.
 SELECT dept.name ,COUNT(teacher.name)
 FROM teacher RIGHT OUTER JOIN dept ON teacher.dept = dept.id
-GROUP BY dept.name;
+GROUP BY dept.name
 
 9.
 SELECT teacher.name, 
 CASE WHEN teacher.dept IN (1, 2) THEN 'Sci'
 ELSE 'Art'
 END
-FROM teacher;
+FROM teacher
 
 10.
 SELECT teacher.name, 
@@ -755,7 +755,7 @@ CASE WHEN teacher.dept IN (1, 2) THEN 'Sci'
 WHEN teacher.dept = 3 THEN 'Art'
 ELSE 'None'
 END
-FROM teacher;
+FROM teacher
 
 QUIZZ 8
 
@@ -777,7 +777,7 @@ SELECT name,
             WHEN phone = 2753 THEN 'three'
             WHEN phone = 2754 THEN 'four'
             END AS digit
-  FROM teacher;
+  FROM teacher
 
 6.
 SELECT name, 
@@ -787,4 +787,96 @@ SELECT name,
         THEN 'Computing' 
        ELSE 'Other' 
       END 
-  FROM teacher;
+  FROM teacher
+
+
+
+=========== Self JOIN ===========
+
+1.
+SELECT COUNT(id)
+FROM stops
+
+2.
+SELECT id
+FROM stops
+WHERE name = 'Craiglockhart'
+
+3.
+SELECT id, name
+FROM stops JOIN route ON stops.id = route.stop
+WHERE num = 4 AND company = 'LRT'
+
+4.
+SELECT company, num, COUNT(*)
+FROM route
+WHERE stop = 149 OR stop = 53
+GROUP BY company, num
+HAVING COUNT(*) = 2
+
+5.
+SELECT a.company, a.num, a.stop, b.stop
+FROM route AS a JOIN route AS b ON (a.company = b.company AND a.num = b.num)
+WHERE a.stop = 53 AND b.stop = 149
+
+6.
+SELECT a.company, a.num, astop.name, bstop.name
+FROM route AS a JOIN route AS b ON (a.company = b.company AND a.num = b.num)
+JOIN stops AS astop ON (a.stop = astop.id)
+JOIN stops AS bstop ON (b.stop = bstop.id)
+WHERE astop.name = 'Craiglockhart' AND bstop.name = 'London Road'
+
+7.
+SELECT DISTINCT a.company, a.num
+FROM route AS a JOIN route AS b ON (a.company = b.company AND a.num = b.num)
+JOIN stops AS astop ON (a.stop = astop.id)
+JOIN stops AS bstop ON (b.stop = bstop.id)
+WHERE astop.name = 'Haymarket' AND bstop.name = 'Leith'
+
+8.
+SELECT DISTINCT a.company, a.num
+FROM route AS a JOIN route AS b ON (a.company = b.company AND a.num = b.num)
+JOIN stops AS astop ON (a.stop = astop.id)
+JOIN stops AS bstop ON (b.stop = bstop.id)
+WHERE astop.name = 'Craiglockhart' AND bstop.name = 'Tollcross'
+
+9.
+SELECT DISTINCT bstop.name, a.company, a.num
+FROM route AS a JOIN route AS b ON (a.company = b.company AND a.num = b.num)
+JOIN stops AS astop ON (a.stop = astop.id)
+JOIN stops AS bstop ON (b.stop = bstop.id)
+WHERE astop.name = 'Craiglockhart'
+
+10.
+SELECT a.num, a.company, bstop.name, c.num, c.company
+FROM route AS a JOIN route AS b ON (a.company = b.company AND a.num = b.num)
+JOIN route AS c ON (b.stop = c.stop)
+JOIN route AS d ON (c.company = d.company AND c.num = d.num)
+JOIN stops AS astop ON (a.stop = astop.id)
+JOIN stops AS bstop ON (b.stop = bstop.id)
+JOIN stops AS cstop ON (c.stop = cstop.id)
+JOIN stops AS dstop ON (d.stop = dstop.id)
+WHERE astop.name = 'Craiglockhart' AND dstop.name = 'Sighthill' AND bstop.id = cstop.id 
+
+QUIZZ 9
+
+1.
+SELECT DISTINCT a.name, b.name
+  FROM stops a JOIN route z ON a.id=z.stop
+  JOIN route y ON y.num = z.num
+  JOIN stops b ON y.stop=b.id
+ WHERE a.name='Craiglockhart' AND b.name ='Haymarket';
+
+2.
+SELECT S2.id, S2.name, R2.company, R2.num
+  FROM stops S1, stops S2, route R1, route R2
+ WHERE S1.name='Haymarket' AND S1.id=R1.stop
+   AND R1.company=R2.company AND R1.num=R2.num
+   AND R2.stop=S2.id AND R2.num='2A';
+
+3.
+SELECT a.company, a.num, stopa.name, stopb.name
+  FROM route a JOIN route b ON (a.company=b.company AND a.num=b.num)
+  JOIN stops stopa ON (a.stop=stopa.id)
+  JOIN stops stopb ON (b.stop=stopb.id)
+ WHERE stopa.name='Tollcross';
