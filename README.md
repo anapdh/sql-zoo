@@ -21,7 +21,8 @@ The original project can be found in: [SQL ZOO](https://sqlzoo.net/wiki/SQL_Tuto
 👩🏼‍💻 **Ana Paula Hübner**
 
 - GitHub: [@anapdh](https://github.com/anapdh)
-- LinkedIn: [LinkedIn](https://www.linkedin.com/in/ana-paula-hübner-7a9484181)
+- Twitter: [@dev_anahub](https://twitter.com/dev_anahub)
+- LinkedIn: [Ana Paula Hübner](https://www.linkedin.com/in/anapdh)
 
 
 ## 🤝 Contributing
